@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="display: block; background-color: green;text-align: center">
+    <h1>Students Manager</h1>
+</div>
+<div>
+    <a th:href="@{/students/create}">Create New Student</a>
+</div>
+<div>
+    <form th:action="@{/students/searchPage}" th:method="get">
+        <input type="text" name="name" placeholder="Enter your name">
+        <button type="submit">Search</button>
+    </form>
+</div>
+<div>
+    <a th:href="@{/students/page}">Reset</a>
+</div>
+<div>
+    <form th:action="@{/students/sort}" >
+        <label>
+            <select name="sort">
+                <option value="point">Point</option>
+                <option value="age">Age</option>
+            </select>
+            <button type="submit">Sort</button>
+        </label>
+    </form>
+</div>
+<div>
+    <form th:action="@{/students/sortByClass}" >
+        <label>
+            <select name="sortByClass" th:onchange="myOnchange()" id="sortByClass">
+                <option >Choice Class</option>
+                <option th:each="c : ${classesList}" th:value="${c.id}" th:text="${c.getName()}"></option>
+            </select>
+        </label>
+    </form>
+</div>
+<div>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Point</th>
+            <th>Class</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </tr>
+        <th:block th:each="student : ${students}">
+            <tr>
+                <td th:text="${student.id}"></td>
+                <td th:text="${student.name}"></td>
+                <td th:text="${student.age}"></td>
+                <td th:text="${student.point}"></td>
+                <td th:text="${student.classes.getName()}"></td>
+                <td><a th:href="@{/students/delete/__${student.id}__}">Delete</a></td>
+                <td><a th:href="@{/students/edit/__${student.id}__}">Edit </a></td>
+            </tr>
+
+        </th:block>
+
+    </table>
+    <div th:if="${search}==null and ${id}==null">
+        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+           th:href="@{/students/page(page=${students.number - 1})}">Previous</a>
+        <span th:text="${students.number + 1}"></span>
+        <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
+        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+           th:href="@{/students/page(page=${students.number + 1})}">Next</a>
+    </div>
+    <div th:if="${search}">
+        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+           th:href="@{/students/searchPage(page=${students.number - 1},name=${search})}">Previous</a>
+        <span th:text="${students.number + 1}"></span>
+        <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
+        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+           th:href="@{/students/searchPage(page=${students.number + 1},name=${search})}">Next</a>
+    </div>
+    <div th:if="${id}">
+        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+           th:href="@{/students/searchClass(page=${students.number - 1},id=${id})}">Previous</a>
+        <span th:text="${students.number + 1}"></span>
+        <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
+        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+           th:href="@{/students/searchClass(page=${students.number + 1},id=${id})}">Next</a>
+    </div>
+</div>
+<script >
+    function myOnchange() {
+        var id = document.getElementById("sortByClass").value;
+        window.location.href=`http://localhost:8080//students/searchClass?id=` + id
+    }
+</script>
+
+</body>
+</html>

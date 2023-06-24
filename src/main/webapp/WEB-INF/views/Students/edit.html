@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div><h1>Edit From Students</h1></div>
+<div>
+    <a th:href="@{/students}">Back to Home Students</a>
+    <a th:href="@{/class}">Back to Home Class</a>
+</div>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<div>
+    <form th:action="@{/students/edit}" th:object="${students}" th:method="post">
+        <label for="id">ID</label>
+        <input type="text" th:field="*{id}" id="id" readonly hidden="">
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name"><br>
+        <label for="age">Age</label>
+        <input type="text" th:field="*{age}" id="age"><br>
+        <label for="point">Point</label>
+        <input type="text" th:field="*{point}" id="point"><br>
+        <label>Class Name</label>
+        <label>
+            <select name="classes">
+                <option selected>---Choice Class---</option>
+                <option
+                        th:each="classe : ${classesList}"
+                        th:value="${classe.id}" th:text="${classe.name}"
+                        th:selected="(${students.classes}) and (${classe.id} == *{classes.id})"
+                ></option>
+            </select>
+        </label><br>
+        <button type="submit">Edit</button>
+    </form>
+</div>
+</body>
+</html>
