@@ -3,41 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<div><h1>Create From Students</h1></div>
+<div style="display: block; background-color: green;text-align: center">
+    <h1>Create From Students</h1></div>
 <div>
-    <a th:href="@{/students}">Back to Home Students</a>
-    <a th:href="@{/class}">Back to Home Class</a>
+    <a th:href="@{/students/page}" class="btn btn-primary btn-lg">Back to Home Students</a>
+    <a th:href="@{/class}" class="btn btn-primary btn-lg">Back to Home Class</a>
 </div>
 <th:block th:if="${message}">
     <p th:text="${message}"></p>
 </th:block>
+
 <div>
     <form th:action="@{/students/create}" th:object="${students}" th:method="post">
-        <th:block th:if="${#message}">
-            <label for="id">ID</label>
-            <input type="text" th:field="*{id}" id="id">
-        </th:block>
-        <label for="name">Name</label>
-        <input type="text" th:field="*{name}" id="name"><br>
-        <label for="age">Age</label>
-        <input type="text" th:field="*{age}" id="age"><br>
-        <label for="point">Point</label>
-        <input type="text" th:field="*{point}" id="point"><br>
-        <label>Class Name</label>
-        <label>
-            <select name="classes" >
-                <option selected>---Choice Class---</option>
-                <option
-                        th:each="classe : ${classesList}"
-                        th:value="${classe.id}" th:text="${classe.name}"
-                        th:selected="(${students.classes}) and (${classe.id} == *{classes.id})"
-               ></option>
-            </select>
-        </label><br>
-        <button type="submit">Create</button>
+        <div class="container">
+            <hr>
+            <th:block th:if="${#message}">
+            <label for="id"><b>ID</b></label>
+            <input type="text"  name="id" id="id" th:field="*{id}">
+            </th:block>
+
+            <label for="name"><b>Name</b></label>
+            <input type="text" placeholder="Enter name" name="name" id="name" th:field="*{name}">
+
+            <label for="age"><b>Age</b></label>
+            <input type="text" placeholder="Enter age" name="age" id="age" th:field="*{age}">
+
+            <label for="point"><b>Point</b></label>
+            <input type="password" placeholder="Repeat point" name="point" id="point" th:field="*{point}">
+            <label>
+                <select class="form-select" aria-label="Default select example" name="classes">
+                    <option selected>---Choice Class---</option>
+                    <option
+                            th:each="classe : ${classesList}"
+                            th:value="${classe.id}" th:text="${classe.name}"
+                            th:selected="(${students.classes}) and (${classe.id} == *{classes.id})"
+                    ></option>
+                </select>
+            </label>
+            <hr>
+
+            <button type="submit" class="register-btn">Register</button>
+        </div>
+
     </form>
 </div>
+
 </body>
 </html>

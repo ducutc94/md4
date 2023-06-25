@@ -3,54 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .container {
+            height: 200px;
+            width: 100%;
+            display: flex;
+        }
+        .container-create,.container-search,.container-reset,.container-sort,.container-sortClass{
+            width: 16%;
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 <div style="display: block; background-color: green;text-align: center">
     <h1>Students Manager</h1>
 </div>
-<div>
-    <a th:href="@{/students/create}">Create New Student</a>
+
+<div class="container">
+    <div class="container-create" style="height: 94px;width: 200px;">
+        <a th:href="@{/students/create}" class="btn btn-primary btn-lg">Create New Student</a>
+    </div>
+    <div class="container-class" style="height: 94px;width: 200px;">
+        <a th:href="@{/class}" class="btn btn-primary btn-lg" style="margin-left: 25px;">Home Class</a>
+    </div>
+
+    <div class="container-search">
+        <form th:action="@{/students/searchPage}" th:method="get" style="display: inline-block;padding-left: 40px;">
+            <input type="text" name="name" placeholder="Enter your name">
+            <button type="submit" class="btn btn-secondary" style="margin-left: 65px;">Search</button>
+        </form>
+    </div>
+    <div class="container-reset" style="text-align: center">
+        <a th:href="@{/students/page}" class="btn btn-secondary" style="margin-left: 65px;">Reset</a>
+    </div>
+    <div class="container-sort">
+        <form>
+            <label>
+                <select class="form-select" aria-label="Default select example" id="sort" name="sort" onchange="changeSort()">
+                    <option>Choice Sort</option>
+                    <option value="point">Point</option>
+                    <option value="age">Age</option>
+                </select>
+            </label>
+        </form>
+    </div>
+    <div class="container-sortClass">
+        <form th:action="@{/students/sortByClass}">
+            <label>
+                <select name="sortByClass" onchange="myOnchange()" id="sortByClass" class="form-select"
+                        aria-label="Default select example">
+                    <option>Choice Class</option>
+                    <option th:each="c : ${classesList}" th:value="${c.id}" th:text="${c.getName()}"></option>
+                </select>
+            </label>
+        </form>
+    </div>
 </div>
-<div>
-    <form th:action="@{/students/searchPage}" th:method="get">
-        <input type="text" name="name" placeholder="Enter your name">
-        <button type="submit">Search</button>
-    </form>
-</div>
-<div>
-    <a th:href="@{/students/page}">Reset</a>
-</div>
-<div>
-    <form th:action="@{/students/sort}" >
-        <label>
-            <select name="sort">
-                <option value="point">Point</option>
-                <option value="age">Age</option>
-            </select>
-            <button type="submit">Sort</button>
-        </label>
-    </form>
-</div>
-<div>
-    <form th:action="@{/students/sortByClass}" >
-        <label>
-            <select name="sortByClass" th:onchange="myOnchange()" id="sortByClass">
-                <option >Choice Class</option>
-                <option th:each="c : ${classesList}" th:value="${c.id}" th:text="${c.getName()}"></option>
-            </select>
-        </label>
-    </form>
-</div>
-<div>
-    <table border="1">
+
+<div class="table-display">
+    <table class="table table-dark table-hover">
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Age</th>
             <th>Point</th>
             <th>Class</th>
-            <th>Delete</th>
-            <th>Edit</th>
+            <th colspan="2" style="text-align: center">Action</th>
         </tr>
         <th:block th:each="student : ${students}">
             <tr>
@@ -59,43 +80,57 @@
                 <td th:text="${student.age}"></td>
                 <td th:text="${student.point}"></td>
                 <td th:text="${student.classes.getName()}"></td>
-                <td><a th:href="@{/students/delete/__${student.id}__}">Delete</a></td>
-                <td><a th:href="@{/students/edit/__${student.id}__}">Edit </a></td>
+                <td><a th:href="@{/students/delete/__${student.id}__}" class="btn btn-warning">Delete</a></td>
+                <td><a th:href="@{/students/edit/__${student.id}__}" class="btn btn-info">Edit </a></td>
             </tr>
 
         </th:block>
 
     </table>
-    <div th:if="${search}==null and ${id}==null">
-        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+    <div th:if="${search}==null and ${id}==null and ${sort}==null" style="text-align: center">
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasPrevious()}"
            th:href="@{/students/page(page=${students.number - 1})}">Previous</a>
-        <span th:text="${students.number + 1}"></span>
+        <span  th:text="${students.number + 1}"></span>
         <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
-        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasNext()}"
            th:href="@{/students/page(page=${students.number + 1})}">Next</a>
     </div>
-    <div th:if="${search}">
-        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+    <div th:if="${search}" style="text-align: center">
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasPrevious()}"
            th:href="@{/students/searchPage(page=${students.number - 1},name=${search})}">Previous</a>
         <span th:text="${students.number + 1}"></span>
         <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
-        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasNext()}"
            th:href="@{/students/searchPage(page=${students.number + 1},name=${search})}">Next</a>
     </div>
-    <div th:if="${id}">
-        <a class="btn btn-primary" th:if="${students.hasPrevious()}"
+    <div th:if="${id}" style="text-align: center">
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasPrevious()}"
            th:href="@{/students/searchClass(page=${students.number - 1},id=${id})}">Previous</a>
         <span th:text="${students.number + 1}"></span>
         <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
-        <a class="btn btn-primary"  th:if="${students.hasNext()}"
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasNext()}"
            th:href="@{/students/searchClass(page=${students.number + 1},id=${id})}">Next</a>
     </div>
+    <div th:if="${sort}" style="text-align: center">
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasPrevious()}"
+           th:href="@{/students/sort(page=${students.number - 1},name=${sort})}">Previous</a>
+        <span th:text="${students.number + 1}"></span>
+        <span th:if="${students.totalPages} > 1 " th:text="'|'+ ${students.totalPages}"></span>
+        <a class="btn btn-secondary btn-sm" th:if="${students.hasNext()}"
+           th:href="@{/students/sort(page=${students.number + 1},name=${sort})}">Next</a>
+    </div>
+
 </div>
-<script >
+<script>
     function myOnchange() {
-        var id = document.getElementById("sortByClass").value;
-        window.location.href=`http://localhost:8080//students/searchClass?id=` + id
+        let id = document.getElementById("sortByClass").value;
+        window.location.href = `http://localhost:8080//students/searchClass?id=` + id
     }
+    function changeSort() {
+      let str= document.getElementById("sort").value;
+        window.location.href = `http://localhost:8080//students/sort?name=` + str
+    }
+
 </script>
 
 </body>

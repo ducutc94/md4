@@ -54,8 +54,18 @@ public class StudentsService implements IStudentsService{
     }
 
     @Override
+    public Page<Students> sort( Pageable pageable) {
+        return studentsRepository.findAllByOrderByPoint(pageable);
+    }
+
+    @Override
     public List<Students> sortByAge() {
         return studentsRepository.findAllByOrderByAge();
+    }
+
+    @Override
+    public Page<Students> sortByAge( Pageable pageable) {
+        return studentsRepository.findAllByOrderByAge(pageable);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class StudentController {
     }
     @GetMapping()
     public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView("/Students/home");
+        ModelAndView modelAndView = new ModelAndView("/Students/page");
         modelAndView.addObject("students",studentsService.findAll());
         return modelAndView;
     }
@@ -48,7 +48,7 @@ public class StudentController {
     }
 
     @GetMapping("/page")
-    public ModelAndView page(@PageableDefault(value = 2 )Pageable pageable){
+    public ModelAndView page(@PageableDefault(value = 3 )Pageable pageable){
         ModelAndView modelAndView = new ModelAndView("/Students/page");
         modelAndView.addObject("students",studentsService.findAll(pageable));
         return modelAndView;
@@ -68,16 +68,14 @@ public class StudentController {
         return "redirect:/students/page";
     }
     @PostMapping("/create")
-    public ModelAndView save(@ModelAttribute Students students){
+    public String save(@ModelAttribute Students students){
         studentsService.save(students);
         if(students!= null){
             Class classes = students.getClasses();
             classes.setQuantity(classes.getQuantity()+1);
             classService.save(classes);
         }
-        ModelAndView modelAndView = new ModelAndView("/Students/home");
-        modelAndView.addObject("students",studentsService.findAll());
-        return modelAndView;
+        return "redirect:/students/page";
 
     }
     @GetMapping("/edit/{id}")
@@ -97,21 +95,23 @@ public class StudentController {
 
 
     @GetMapping("/sort")
-    public ModelAndView sort(@RequestParam("sort") String str){
+    public ModelAndView sort(@RequestParam("name") String str,@PageableDefault(value = 3) Pageable pageable){
         if(str.equals("point")){
            List<Students> studentsList= studentsService.sort();
-            ModelAndView modelAndView = new ModelAndView("/Students/home");
-            modelAndView.addObject("students",studentsList);
+            ModelAndView modelAndView = new ModelAndView("/Students/page");
+            modelAndView.addObject("students",studentsService.sort(pageable));
+            modelAndView.addObject("sort",str);
             return modelAndView;
         }else {
             List<Students> studentsList= studentsService.sortByAge();
-            ModelAndView modelAndView = new ModelAndView("/Students/home");
-            modelAndView.addObject("students",studentsList);
+            ModelAndView modelAndView = new ModelAndView("/Students/page");
+            modelAndView.addObject("students",studentsService.sortByAge(pageable));
+            modelAndView.addObject("sort",str);
             return modelAndView;
         }
     }
     @GetMapping("/searchClass")
-    public ModelAndView sortByClass(@RequestParam("id") Long id,@PageableDefault(value = 2) Pageable pageable){
+    public ModelAndView sortByClass(@RequestParam("id") Long id,@PageableDefault(value = 3) Pageable pageable){
         Class classes = classService.findByID(id);
         studentsService.searchClass(classes,pageable);
         ModelAndView modelAndView = new ModelAndView("/Students/page");

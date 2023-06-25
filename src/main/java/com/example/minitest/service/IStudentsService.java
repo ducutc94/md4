@@ -15,7 +15,9 @@ public interface IStudentsService extends IGeneralService<Students> {
     Page<Students> searchPage(String name,Pageable pageable);
     Page<Students> searchClass(Class classes, Pageable pageable);
     List<Students> sort();
+    Page<Students> sort(Pageable pageable);
     List<Students> sortByAge();
+    Page<Students> sortByAge(Pageable pageable);
     List<Students> sortByClass(Long id);
 
 }
