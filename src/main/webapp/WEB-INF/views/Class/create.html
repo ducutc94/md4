@@ -9,8 +9,8 @@
 <body>
 <div style="display: block; background-color: green;text-align: center"><h1>Form Create Class</h1></div>
 <div>
-    <a th:href="@{/class}" class="btn btn-primary btn-lg">Back to Home Class</a>
-    <a th:href="@{/students/page}" class="btn btn-primary btn-lg">Back to Home Students</a>
+    <a th:href="@{/class}" class="btn btn-primary btn-sm">Back to Home Class</a>
+    <a th:href="@{/students/page}" class="btn btn-primary btn-sm">Back to Home Students</a>
 </div>
 <th:block th:if="${message}">
     <p th:text="${message}" class="alert alert-success" style="text-align: center"></p>
@@ -30,7 +30,7 @@
         <label for="name" style="font-style: revert"><b>Name</b></label><br>
         <input type="text" placeholder="Enter name" name="name" id="name" th:field="*{name}">
     </div>
-    <div style="text-align: center"><button type="submit" class="register-btn" style="text-align: center">Create</button></div>
+    <div style="text-align: center"><button type="submit" class="btn btn-success" style="text-align: center">Create</button></div>
 </form>
 </body>
 </html>

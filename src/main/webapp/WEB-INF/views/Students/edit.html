@@ -10,14 +10,18 @@
 <div style="display: block; background-color: green;text-align: center">
     <h1>Edit From Students</h1></div>
 <div>
-    <a th:href="@{/students}" class="btn btn-primary btn-lg">Back to Home Students</a>
-    <a th:href="@{/class}" class="btn btn-primary btn-lg">Back to Home Class</a>
+    <a th:href="@{/students/page}" class="btn btn-primary btn-sm">Back to Home Students</a>
+    <a th:href="@{/class}" class="btn btn-primary btn-sm">Back to Home Class</a>
 </div>
 <th:block th:if="${message}">
     <p th:text="${message}" class="alert alert-primary" style="text-align: center"></p>
 </th:block>
+
 <div>
     <form th:action="@{/students/edit}" th:object="${students}" th:method="post">
+        <label>
+            <input type="text" th:value="${ClassID.getId()}" name="classId" >
+        </label>
         <div class="container">
                 <label for="id"><b>ID</b></label>
                 <input type="text"  name="id" id="id" th:field="*{id}" readonly hidden="">

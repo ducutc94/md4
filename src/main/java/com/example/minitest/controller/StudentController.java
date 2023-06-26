@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -82,10 +83,19 @@ public class StudentController {
     public ModelAndView edit(@PathVariable("id") Long id){
         ModelAndView modelAndView = new ModelAndView("/Students/edit");
         modelAndView.addObject("students",studentsService.findByID(id));
+        modelAndView.addObject("ClassID",studentsService.findByID(id).getClasses());
         return modelAndView;
     }
     @PostMapping("/edit")
-    public ModelAndView update(@ModelAttribute("students") Students students){
+    public ModelAndView update(@ModelAttribute("students") Students students,@RequestParam("classId") Long id) {
+      Class classes = classService.findByID(id);
+        if(!Objects.equals(students.getClasses().getId(), id)){
+            Class classes1 = students.getClasses();
+            classes1.setQuantity(classes1.getQuantity()+1);
+            classes.setQuantity(classes.getQuantity()-1);
+            classService.save(classes);
+            classService.save(classes1);
+        }
         studentsService.save(students);
         ModelAndView modelAndView = new ModelAndView("/Students/edit");
         modelAndView.addObject("students",students);
@@ -96,19 +106,15 @@ public class StudentController {
 
     @GetMapping("/sort")
     public ModelAndView sort(@RequestParam("name") String str,@PageableDefault(value = 3) Pageable pageable){
+        ModelAndView modelAndView = new ModelAndView("/Students/page");
         if(str.equals("point")){
-           List<Students> studentsList= studentsService.sort();
-            ModelAndView modelAndView = new ModelAndView("/Students/page");
             modelAndView.addObject("students",studentsService.sort(pageable));
-            modelAndView.addObject("sort",str);
-            return modelAndView;
         }else {
-            List<Students> studentsList= studentsService.sortByAge();
-            ModelAndView modelAndView = new ModelAndView("/Students/page");
+
             modelAndView.addObject("students",studentsService.sortByAge(pageable));
-            modelAndView.addObject("sort",str);
-            return modelAndView;
         }
+        modelAndView.addObject("sort",str);
+        return modelAndView;
     }
     @GetMapping("/searchClass")
     public ModelAndView sortByClass(@RequestParam("id") Long id,@PageableDefault(value = 3) Pageable pageable){

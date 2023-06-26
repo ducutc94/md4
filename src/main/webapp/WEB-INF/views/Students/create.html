@@ -10,8 +10,8 @@
 <div style="display: block; background-color: green;text-align: center">
     <h1>Create From Students</h1></div>
 <div>
-    <a th:href="@{/students/page}" class="btn btn-primary btn-lg">Back to Home Students</a>
-    <a th:href="@{/class}" class="btn btn-primary btn-lg">Back to Home Class</a>
+    <a th:href="@{/students/page}" class="btn btn-primary btn-sm">Back to Home Students</a>
+    <a th:href="@{/class}" class="btn btn-primary btn-sm">Back to Home Class</a>
 </div>
 <th:block th:if="${message}">
     <p th:text="${message}"></p>
@@ -46,7 +46,7 @@
             </label>
             <hr>
 
-            <button type="submit" class="register-btn">Register</button>
+            <button type="submit" class="btn btn-success">Register</button>
         </div>
 
     </form>
