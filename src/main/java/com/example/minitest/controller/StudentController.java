@@ -64,7 +64,7 @@ public class StudentController {
     public String deleteById(@PathVariable("id") Long id){
         Class classes = studentsService.findByID(id).getClasses();
         classes.setQuantity(classes.getQuantity() - 1);
-        classService.save(classes);
+        classService.saveClass(classes);
         studentsService.remove(id);
         return "redirect:/students/page";
     }
@@ -74,7 +74,7 @@ public class StudentController {
         if(students!= null){
             Class classes = students.getClasses();
             classes.setQuantity(classes.getQuantity()+1);
-            classService.save(classes);
+            classService.saveClass(classes);
         }
         return "redirect:/students/page";
 
@@ -93,8 +93,8 @@ public class StudentController {
             Class classes1 = students.getClasses();
             classes1.setQuantity(classes1.getQuantity()+1);
             classes.setQuantity(classes.getQuantity()-1);
-            classService.save(classes);
-            classService.save(classes1);
+            classService.saveClass(classes);
+            classService.saveClass(classes1);
         }
         studentsService.save(students);
         ModelAndView modelAndView = new ModelAndView("/Students/edit");

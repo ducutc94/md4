@@ -16,11 +16,13 @@
   <p th:text="${message}" class="alert alert-primary" style="text-align: center"></p>
 </th:block>
 <form th:action="@{/class/edit}" th:object="${classes}" th:method="post">
+    <input type="text" th:field="*{quantity}" style="display: none"><br>
   <div class="container">
   <div>
     <label for="id">ID</label><br>
     <input type="text" th:field="*{id}" readonly id="id"><br>
   </div>
+
   <div>
     <label for="name">NAME</label><br>
     <input type="text" th:field="*{name}" id="name">

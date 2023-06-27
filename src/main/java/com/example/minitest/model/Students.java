@@ -10,7 +10,7 @@ public class Students {
     private String name;
     private int age;
     private double point;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Class classes;
 
     public Students(Long id, String name, int age, double point, Class classes) {

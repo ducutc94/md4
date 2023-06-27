@@ -27,12 +27,28 @@ public class StudentsService implements IStudentsService{
     }
 
     @Override
+    public void saveClass(Students students) {
+
+    }
+
+    @Override
+    public int checkClass(Students students) {
+        return 0;
+    }
+
+    @Override
     public void remove(Long id) {
         Students students = studentsRepository.findById(id).get();
         if(students != null){
             studentsRepository.delete(students);
         }
     }
+
+    @Override
+    public void update(Students students) {
+
+    }
+
     @Override
     public List<Students> search(String name) {
         return (List<Students>) studentsRepository.findAllByName(name);

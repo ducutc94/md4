@@ -31,10 +31,14 @@ public class ClassController {
     @PostMapping("/create")
     public ModelAndView saveClass(@ModelAttribute("classes") Class classes) {
         ModelAndView modelAndView = new ModelAndView("/Class/create");
-        classes.setQuantity(0);
-        classService.save(classes);
-        modelAndView.addObject("classes", classes);
-        modelAndView.addObject("message", "Create okay");
+        if(classService.checkClass(classes)!=-1){
+            classService.save(classes);
+            modelAndView.addObject("classes", classes);
+            modelAndView.addObject("message", "Create okay");
+        }else {
+            modelAndView.addObject("message2", "Name class is already exist");
+        }
+
         return modelAndView;
     }
 
@@ -49,13 +53,14 @@ public class ClassController {
         Class classes = classService.findByID(id);
         ModelAndView modelAndView = new ModelAndView("/Class/edit");
         modelAndView.addObject("classes", classes);
+        modelAndView.addObject("classesName", classes.getName());
         return modelAndView;
     }
 
     @PostMapping("/edit")
     public ModelAndView editClass(@ModelAttribute("classes") Class classes) {
         ModelAndView modelAndView = new ModelAndView("/Class/edit");
-        classService.save(classes);
+        classService.update(classes);
         modelAndView.addObject("classes", classes);
         modelAndView.addObject("message", "Edit okay");
         return modelAndView;

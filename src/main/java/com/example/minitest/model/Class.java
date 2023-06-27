@@ -1,6 +1,8 @@
 package com.example.minitest.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Class {
@@ -10,6 +12,8 @@ public class Class {
     private String name;
     @Column(columnDefinition = "integer default 0")
     private Integer quantity ;
+    @OneToMany(mappedBy = "classes" ,fetch = FetchType.LAZY)
+    private List<Students> studentsList = new ArrayList<Students>();
 
     public Class() {
     }

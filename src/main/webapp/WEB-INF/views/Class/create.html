@@ -11,11 +11,16 @@
 <div>
     <a th:href="@{/class}" class="btn btn-primary btn-sm">Back to Home Class</a>
     <a th:href="@{/students/page}" class="btn btn-primary btn-sm">Back to Home Students</a>
+    <a th:if="${message}" th:href="@{/class/create}" class="btn btn-primary btn-sm">Add</a>
+    <a th:if="${message2}" th:href="@{/class/create}" class="btn btn-primary btn-sm">Add Again</a>
 </div>
 <th:block th:if="${message}">
     <p th:text="${message}" class="alert alert-success" style="text-align: center"></p>
 </th:block>
-<form th:action="@{/class/create}" th:object="${classes}" th:method="post">
+<th:block th:if="${message2}">
+    <p th:text="${message2}" class="alert alert-success" style="text-align: center"></p>
+</th:block>
+<form th:if="${message2}== null" th:action="@{/class/create}" th:object="${classes}" th:method="post">
    <div class="container">
        <th:block th:if="${message}">
            <div style="text-align: center">
@@ -30,7 +35,7 @@
         <label for="name" style="font-style: revert"><b>Name</b></label><br>
         <input type="text" placeholder="Enter name" name="name" id="name" th:field="*{name}">
     </div>
-    <div style="text-align: center"><button type="submit" class="btn btn-success" style="text-align: center">Create</button></div>
+    <div th:if="${message} == null" style="text-align: center"><button type="submit" class="btn btn-success" style="text-align: center">Create</button></div>
 </form>
 </body>
 </html>
